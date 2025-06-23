@@ -28,7 +28,7 @@ export class AppComponent {
   constructor(private envInjector: EnvironmentInjector) {}
 
   async ngOnInit() {
-    const loginModule = await loadRemoteModule({
+    const searchModule = await loadRemoteModule({
       remoteEntry: 'http://localhost:4300/remoteEntry.js',
       exposedModule: './SearchComponent',
       type: 'module',
@@ -41,7 +41,7 @@ export class AppComponent {
     });
 
     const searchComponent = createComponent(
-      loginModule.SearchComponent as Type<any>,
+      searchModule.SearchComponent as Type<any>,
       {
         environmentInjector: this.envInjector,
       }
