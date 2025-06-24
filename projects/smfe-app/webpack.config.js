@@ -3,19 +3,45 @@ const {
   withModuleFederationPlugin,
 } = require("@angular-architects/module-federation/webpack");
 
-module.exports = withModuleFederationPlugin({
-  name: "smfe-app",
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-  exposes: {
-    "./BannerComponent":
-      "./projects/smfe-app/src/app/banner/banner.component.ts",
-  },
+module.exports = (env, argv) => {
+  const federationConfig = withModuleFederationPlugin({
+    name: "smfe-app",
 
-  shared: {
-    ...shareAll({
-      singleton: true,
-      strictVersion: true,
-      requiredVersion: "auto",
-    }),
-  },
-});
+    exposes: {
+      "./BannerComponent":
+        "./projects/smfe-app/src/app/banner/banner.component.ts",
+    },
+
+    shared: {
+      ...shareAll({
+        singleton: true,
+        strictVersion: true,
+        requiredVersion: "auto",
+      }),
+    },
+  });
+
+  return {
+    ...federationConfig,
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            "postcss-loader", // Ensure postcss-loader is used for Tailwind
+          ],
+        },
+      ],
+    },
+    plugins: [
+      ...federationConfig.plugins,
+      new MiniCssExtractPlugin({
+        filename: "[name].[contenthash].css",
+      }),
+    ],
+  };
+};

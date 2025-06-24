@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { loadRemoteModule } from '@angular-architects/module-federation';
+//import 'tailwindcss/tailwind.css'; no jala
 
 @Component({
   selector: 'app-root',
